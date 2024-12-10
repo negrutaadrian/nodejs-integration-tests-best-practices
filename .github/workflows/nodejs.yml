@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Node.js CI with Parallelism
 
 on:
   push:
@@ -11,9 +11,11 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  setup:
+    name: Setup Environment
     runs-on: ubuntu-latest
-
+    outputs:
+      node-version: ${{ steps.nvm.outputs.NVMRC }}
     steps:
     - uses: actions/checkout@v2
 
@@ -25,21 +27,57 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: "${{ steps.nvm.outputs.NVMRC }}"
-        
-    # Add cache for the node modules
-    - name: Cache node modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-        
+
     - name: Install Docker Compose
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
+
+  npm-ci:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "${{ needs.setup.outputs.node-version }}"
     - run: npm ci
+
+  npm-test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: npm-ci
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "${{ needs.setup.outputs.node-version }}"
     - run: npm test
+
+  nestjs-test:
+    name: Test NestJS
+    runs-on: ubuntu-latest
+    needs: npm-ci
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "${{ needs.setup.outputs.node-version }}"
     - run: npm run test:nestjs
+
+  mocha-test:
+    name: Test Mocha
+    runs-on: ubuntu-latest
+    needs: npm-ci
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "${{ needs.setup.outputs.node-version }}"
     - run: npm run test:mocha
+
