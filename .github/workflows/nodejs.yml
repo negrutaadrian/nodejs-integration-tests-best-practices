@@ -73,7 +73,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - run: npm ci
+    - run: npm -i
 
   npm-test:
     name: Run Tests
