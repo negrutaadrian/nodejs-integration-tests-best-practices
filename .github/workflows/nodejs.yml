@@ -42,10 +42,10 @@ jobs:
       with:
         node-version: "${{ needs.setup.outputs.node-version }}"
     
-    - name: Cache Node.js modules
+    - name: Cache node_modules
       uses: actions/cache@v3
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
@@ -59,10 +59,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Node.js modules
+    - name: Use Cached node_modules
       uses: actions/cache@v3
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
@@ -84,10 +84,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Node.js modules
+    - name: Use Cached node_modules
       uses: actions/cache@v3
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
@@ -109,10 +109,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache Node.js modules
+    - name: Use Cached node_modules
       uses: actions/cache@v3
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
