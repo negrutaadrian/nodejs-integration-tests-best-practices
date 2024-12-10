@@ -74,7 +74,10 @@ jobs:
 
     - name: Add node_modules/.bin to PATH
       run: echo "${{ github.workspace }}/node_modules/.bin" >> $GITHUB_PATH
-    
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
     - run: npm test
 
   nestjs-test:
@@ -99,6 +102,11 @@ jobs:
 
     - name: Add node_modules/.bin to PATH
       run: echo "${{ github.workspace }}/node_modules/.bin" >> $GITHUB_PATH
+    
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
     
     - run: npm run test:nestjs
 
@@ -125,4 +133,9 @@ jobs:
     - name: Add node_modules/.bin to PATH
       run: echo "${{ github.workspace }}/node_modules/.bin" >> $GITHUB_PATH
     
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
     - run: npm run test:mocha
