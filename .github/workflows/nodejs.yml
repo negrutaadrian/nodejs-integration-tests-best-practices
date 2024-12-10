@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0 # Ensure the full Git history is available
+        fetch-depth: 2 # Ensure the full Git history is available
 
     - name: Check for Changes in `test_file.txt`
       id: detect-changes
